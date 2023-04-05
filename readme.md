@@ -1,0 +1,5 @@
+1. Crear la clase ProductManager que va a gestionar la adhesion de productos.
+2. Crear un metodo 'addProduct' el cual puede sumar nuevos productos a nuestra lista. Estos productos poseen las siguientes caracteristicas: título, descripción, precio, miniatura, código, stock disponible y un identificador.
+Dentro de este metodo hay un condicional que funciona como validador, para asegurarse de que ninguno de los datos fue omitido a la hora de cargar un producto
+3. Crear un metodo 'getProducts' que devuelve el arreglo con todos los productos creados hasta ese momento.
+4. Crear un metodo 'getProductById' que busca en el arreglo de objetos por algun id que coincida con el valor ingresado. En caso de coincidir, mostrara el objeto. En caso de que no coincida con ninguno, arrojara el error 'Not Found'.
