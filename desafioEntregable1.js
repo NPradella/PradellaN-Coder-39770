@@ -120,3 +120,7 @@ class ProductManager{
     manageProducts()
     
     
+
+    modificarProductos.getProductById(1)
+    modificarProductos.getProductById(2)
+
