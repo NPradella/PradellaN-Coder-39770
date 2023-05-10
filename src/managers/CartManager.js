@@ -57,7 +57,7 @@ async getCarts() {
      }
       
   async getCartById(id) {
-       let cart = this.carts.find((cart) => cart.id === id);
+       let cart = this.carts.find((cart) => cart.id == id);
        if (cart === undefined) {
              console.log('getCartById: Not found');
             return 'Not found';
@@ -68,9 +68,50 @@ async getCarts() {
       
     
   }
+  async deleteCart(id) {
+    try {
+        let one = this.carts.find(each=>each.id===id)
+        if (one) {
+            this.products = this.carts.filter(each=>each.id!==id)
+            let data_json = JSON.stringify(this.carts,null,2)
+            await fs.promises.writeFile(this.path,data_json)
+            console.log('deleted cart`s id : '+id)
+            return 200
+        }
+        console.log('not found')
+        return null
+    } catch(error) {
+        console.log(error)
+        return null
+    }
 }
 
-let cartsManager = new CartManager('./data/carts.js')
+async updateCart (id, data){
+    try{
+        let cart = await this.getCartById(id)
+        for (let prop in data){
+            console.log('la prop es ', prop)
+            console.log('cart es ', cart)
+            console.log('data es ', data)
+            cart[prop] = Number(data[prop])
+            console.log('cart actualizado ', cart)
+        }
+        let data_json = JSON.stringify(this.carts,null,2)
+        await fs.promises.writeFile(this.path,data_json)
+        console.log('updated cart`s id : '+id)
+
+
+
+        return 200
+    } catch(error) {
+        console.log(error)
+        return null
+    }
+}
+
+}
+
+let cartsManager = new CartManager('./src/data/carts.json')
 
 // async function createCarts(){
 // await cartsManager.addCart(2,4)

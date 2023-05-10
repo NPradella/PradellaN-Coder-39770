@@ -1,5 +1,4 @@
 import fs from 'fs'
-
 class ProductManager{
     constructor(path){
         this.products = []
@@ -46,7 +45,7 @@ class ProductManager{
             
             await fs.promises.writeFile(this.path,data_json)
             console.log('created product´s  id: '+data.id)
-            return 'product´s id: '+data.id
+            return data
         } catch(error){
                 console.log('addProduct:error')
         }   }
@@ -55,47 +54,56 @@ class ProductManager{
             console.log(this.products)
             return this.products
     }
-    getProductById(id){
-    
-     let producto = this.products.find(producto => producto.id === id )
-     if(producto === undefined){
+    async getProductById(id){
+     let producto = await this.products.find(each => each.id == id )
+     if(!producto){
         console.log('Not Found')
      }else{
-        console.log(producto)
         return producto
      }
      
     }
 
-    async updateProduct(id, data){
-
+    async updateProduct(id, data) {
+        
         try {
-            let product = this.getProductById(id)
-            for (let prop in data){
-                product[prop] = data[prop]
+            console.log('data ', data)
+          let product = await this.getProductById(id);
+          if (product) {
+            for (let prop in data) {
+              product[prop] = data[prop];
             }
-            let data_json = JSON.stringify(this.products,null,2)
-            await fs.promises.writeFile(this.path, data_json)
-            console.log('UpdateProduct: done ')
-        } catch(error){
-            console.log('updateProduct: error')
+            let data_json = JSON.stringify(this.products, null, 2);
+            await fs.promises.writeFile(this.path, data_json);
+            console.log('updateProduct: done');
+          } else {
+            console.log('Product not found');
+          }
+        } catch (error) {
+          console.log('updateProduct: error');
+          throw error;
         }
+      }
 
-    }
-
-    async deleteProduct(id){
-        try{
-            this.products = this.products.filter(each=>each.id!==id)
-            let data_json = JSON.stringify(this.products,null,2)
-            await fs.promises.writeFile(this.path, data_json)
-            console.log('deleteProduct: done')
-        }catch(error){
-            console.log('deleteProduct: error')
+      async deleteProduct(id) {
+        try {
+            let one = this.products.find(each=>each.id===id)
+            if (one) {
+                this.products = this.products.filter(each=>each.id!==id)
+                let data_json = JSON.stringify(this.products,null,2)
+                await fs.promises.writeFile(this.path,data_json)
+                console.log('deleted product`s id : '+id)
+                return 200
+            }
+            console.log('not found')
+            return null
+        } catch(error) {
+            console.log(error)
+            return null
         }
-
     }
 }
-let prodManager = new ProductManager('./data/products.js')
+let prodManager = new ProductManager('./src/data/products.json')
 
 
 
